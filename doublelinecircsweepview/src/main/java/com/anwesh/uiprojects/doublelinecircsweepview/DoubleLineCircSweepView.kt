@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.doublelinecircsweepview
  * Created by anweshmishra on 01/09/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.graphics.Canvas
@@ -189,6 +190,14 @@ class DoubleLineCircSweepView(ctx : Context) : View(ctx) {
             dlsc.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : DoubleLineCircSweepView {
+            val view : DoubleLineCircSweepView = DoubleLineCircSweepView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }

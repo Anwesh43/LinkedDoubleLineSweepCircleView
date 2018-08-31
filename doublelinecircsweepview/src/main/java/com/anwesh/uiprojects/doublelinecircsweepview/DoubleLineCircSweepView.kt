@@ -168,4 +168,26 @@ class DoubleLineCircSweepView(ctx : Context) : View(ctx) {
             curr.draw(canvas, paint)
         }
     }
+
+    data class Renderer(var view : DoubleLineCircSweepView) {
+
+        private val animator : Animator = Animator(view)
+        private val dlsc : DoubleLineCircSweep = DoubleLineCircSweep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            dlsc.draw(canvas, paint)
+            animator.animate {
+                dlsc.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            dlsc.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }

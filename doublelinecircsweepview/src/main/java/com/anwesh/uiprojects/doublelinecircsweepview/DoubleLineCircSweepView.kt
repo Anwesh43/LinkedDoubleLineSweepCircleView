@@ -10,8 +10,34 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.content.Context
+import android.graphics.Color
 
 val nodes : Int = 5
+
+fun Canvas.drawDLCSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / nodes
+    val r : Float = gap / 4
+    val index : Int = i % 2
+    paint.strokeWidth = Math.min(w, h) / 60
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.color = Color.parseColor("#1E88E5")
+    val sc : Float = Math.min(0.5f, Math.max(0f, scale - 0.5f)) * 2
+    save()
+    translate(w/2, i * gap)
+    for (j in 0..1) {
+        save()
+        translate(-gap * (1 - 2 * j), 0f)
+        drawLine(0f, 0f, 0f, gap * scale, paint)
+        restore()
+    }
+    save()
+    translate(-gap * (1 - 2 * index), gap / 2)
+    drawArc(RectF(-r, -r, r, r), -90f, 360f * sc, true, paint)
+    restore()
+    restore()
+}
 
 class DoubleLineCircSweepView(ctx : Context) : View(ctx) {
 

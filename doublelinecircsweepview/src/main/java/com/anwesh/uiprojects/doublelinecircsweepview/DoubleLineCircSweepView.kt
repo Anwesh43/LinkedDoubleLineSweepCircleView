@@ -44,9 +44,14 @@ class DoubleLineCircSweepView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val renderer : Renderer = Renderer(this)
+    var dlAnimationListener : DLAnimationListener? = null
 
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
+    }
+
+    fun addAnimationListener(onComplete : (Int) -> Unit, onReset : (Int) -> Unit) {
+        dlAnimationListener = DLAnimationListener(onComplete, onReset)
     }
 
     override fun onTouchEvent(event : MotionEvent) : Boolean {
@@ -182,6 +187,10 @@ class DoubleLineCircSweepView(ctx : Context) : View(ctx) {
             animator.animate {
                 dlsc.update {i, scl ->
                     animator.stop()
+                    when (scl) {
+                        0f -> view.dlAnimationListener?.onReset?.invoke(i)
+                        1f -> view.dlAnimationListener?.onComplete?.invoke(i)
+                    }
                 }
             }
         }
@@ -200,4 +209,6 @@ class DoubleLineCircSweepView(ctx : Context) : View(ctx) {
             return view
         }
     }
+
+    data class DLAnimationListener(var onComplete : (Int) -> Unit, var onReset : (Int) -> Unit)
 }
